@@ -4,20 +4,22 @@ const renderImgOrSvg = require('renderImgOrSvg');
 const debug = createDebug('app:views:img');
 
 const img = async (ctx, page, size) => {
-  const svg = await page.$('#container > svg');
+  const svg = await page.locator('#container > svg');
   debug('got the svg element');
 
-  // If a size value has been explicitely set
+  // If a size value has been explicitly set
   if (size.width || size.height) {
-    await page.$eval('#container > svg', (svgElement) => {
-      // Allow the element's max-width to exceed 100% for full resolution when screenshotted
+    await page.evaluate(() => {
+      const svgElement = document.querySelector('#container > svg');
       svgElement.style.maxWidth = null;
     });
   }
 
   // read type from query parameter, allow all types supported by puppeteer https://pptr.dev/api/puppeteer.screenshotoptions.type
   // defaults to jpeg, because that was originally the hardcoded type
-  const type = ['jpeg', 'png', 'webp'].includes(ctx.query.type?.toLowerCase())
+  const type = ['jpeg', 'png' /* 'webp' */].includes(
+    ctx.query.type?.toLowerCase()
+  )
     ? ctx.query.type?.toLowerCase()
     : 'jpeg';
   debug('screenshot type: %s', type);

@@ -77,7 +77,7 @@ module.exports = async (ctx, _next) => {
       ctx.throw(400, 'invalid encoded code');
     }
 
-    const svg = await page.$('#container > svg');
+    const svg = await page.locator('#container > svg');
     debug('got the svg element');
 
     const { width, height } = await svg.boundingBox();

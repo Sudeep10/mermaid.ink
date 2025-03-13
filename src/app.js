@@ -2,7 +2,8 @@ const Koa = require('koa');
 const cors = require('@koa/cors');
 const createDebug = require('debug');
 const route = require('koa-route');
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
+const playwright = require('playwright');
 
 const views = require('./views');
 
@@ -39,7 +40,7 @@ async function setup() {
 
   debug('launch headless browser instance');
 
-  app.context.browser = await puppeteer.launch({
+  app.context.browser = await playwright.chromium.launch({
     dumpio: true,
     defaultViewport: {
       width: 1920,

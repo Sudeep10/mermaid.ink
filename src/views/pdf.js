@@ -4,15 +4,20 @@ const renderImgOrSvg = require('renderImgOrSvg');
 const debug = createDebug('app:views:pdf');
 
 const pdf = async (ctx, page, size) => {
-  // If a size value has been explicitely set
+  // If a size value has been explicitly set
   if (size.width || size.height) {
-    await page.$eval('#container > svg', (svgElement) => {
-      // Allow the element's max-width to exceed 100% for full resolution when screenshotted
+    await page.evaluate(() => {
+      const svgElement = document.querySelector('#container > svg');
       svgElement.style.maxWidth = null;
     });
+    // await page.locator('#container > svg', (svgElement) => {
+    //   // Allow the element's max-width to exceed 100% for full resolution when screenshotted
+    //   svgElement.style.maxWidth = null;
+    // });
   }
 
-  const clip = await page.$eval('#container > svg', (svgElement) => {
+  const clip = await page.evaluate(() => {
+    const svgElement = document.querySelector('#container > svg');
     const rect = svgElement.getBoundingClientRect();
     return {
       x: rect.left,
